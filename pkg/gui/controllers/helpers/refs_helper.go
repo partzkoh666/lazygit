@@ -14,14 +14,6 @@ import (
 	"github.com/samber/lo"
 )
 
-type IRefsHelper interface {
-	CheckoutRef(ref string, options types.CheckoutRefOptions) error
-	GetCheckedOutRef() *models.Branch
-	CreateGitResetMenu(ref string) error
-	ResetToRef(ref string, strength string, envVars []string) error
-	NewBranch(from string, fromDescription string, suggestedBranchname string) error
-}
-
 type RefsHelper struct {
 	c *HelperCommon
 }
@@ -33,8 +25,6 @@ func NewRefsHelper(
 		c: c,
 	}
 }
-
-var _ IRefsHelper = &RefsHelper{}
 
 func (self *RefsHelper) CheckoutRef(ref string, options types.CheckoutRefOptions) error {
 	waitingStatus := options.WaitingStatus
