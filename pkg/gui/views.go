@@ -72,6 +72,18 @@ func (gui *Gui) orderedViewNameMappings() []viewNameMapping {
 	}
 }
 
+func (gui *Gui) mainViews() []*gocui.View {
+	return []*gocui.View{
+		gui.Views.Main,
+		gui.Views.Secondary,
+		gui.Views.Staging,
+		gui.Views.StagingSecondary,
+		gui.Views.PatchBuilding,
+		gui.Views.PatchBuildingSecondary,
+		gui.Views.MergeConflicts,
+	}
+}
+
 func (gui *Gui) createAllViews() error {
 	var err error
 	for _, mapping := range gui.orderedViewNameMappings() {
@@ -113,7 +125,7 @@ func (gui *Gui) createAllViews() error {
 
 	gui.Views.Files.Title = gui.c.Tr.FilesTitle
 
-	for _, view := range []*gocui.View{gui.Views.Main, gui.Views.Secondary, gui.Views.Staging, gui.Views.StagingSecondary, gui.Views.PatchBuilding, gui.Views.PatchBuildingSecondary, gui.Views.MergeConflicts} {
+	for _, view := range gui.mainViews() {
 		view.Title = gui.c.Tr.DiffTitle
 		view.Wrap = true
 		view.IgnoreCarriageReturns = true
@@ -201,7 +213,7 @@ func (gui *Gui) configureViewProperties() {
 		(*mapping.viewPtr).InactiveViewSelBgColor = theme.GocuiInactiveViewSelectedLineBgColor
 	}
 
-	for _, view := range []*gocui.View{gui.Views.Main, gui.Views.Secondary, gui.Views.Staging, gui.Views.StagingSecondary, gui.Views.PatchBuilding, gui.Views.PatchBuildingSecondary, gui.Views.MergeConflicts} {
+	for _, view := range gui.mainViews() {
 		view.CanScrollPastBottom = gui.c.UserConfig().Gui.ScrollPastBottom
 	}
 
