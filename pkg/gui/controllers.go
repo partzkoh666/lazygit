@@ -181,6 +181,7 @@ func (gui *Gui) resetHelpersAndControllers() {
 	contextLinesController := controllers.NewContextLinesController(common)
 	renameSimilarityThresholdController := controllers.NewRenameSimilarityThresholdController(common)
 	verticalScrollControllerFactory := controllers.NewVerticalScrollControllerFactory(common, &gui.viewBufferManagerMap)
+	viewSelectionControllerFactory := controllers.NewViewSelectionControllerFactory(common, &gui.viewBufferManagerMap)
 
 	branchesController := controllers.NewBranchesController(common)
 	gitFlowController := controllers.NewGitFlowController(common)
@@ -310,11 +311,15 @@ func (gui *Gui) resetHelpersAndControllers() {
 
 	controllers.AttachControllers(gui.State.Contexts.Diff,
 		diffController,
-		verticalScrollControllerFactory.Create(gui.State.Contexts.Diff))
+		verticalScrollControllerFactory.Create(gui.State.Contexts.Diff),
+		viewSelectionControllerFactory.Create(gui.State.Contexts.Diff),
+	)
 
 	controllers.AttachControllers(gui.State.Contexts.DiffSecondary,
 		diffSecondaryController,
-		verticalScrollControllerFactory.Create(gui.State.Contexts.DiffSecondary))
+		verticalScrollControllerFactory.Create(gui.State.Contexts.DiffSecondary),
+		viewSelectionControllerFactory.Create(gui.State.Contexts.DiffSecondary),
+	)
 
 	controllers.AttachControllers(gui.State.Contexts.Files,
 		filesController,
