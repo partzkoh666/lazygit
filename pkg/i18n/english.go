@@ -237,6 +237,7 @@ type TranslationSet struct {
 	IgnoreFile                            string
 	ExcludeFile                           string
 	RefreshFiles                          string
+	FocusMainView                         string
 	Merge                                 string
 	RegularMerge                          string
 	MergeBranchTooltip                    string
@@ -1219,6 +1220,7 @@ func EnglishTranslationSet() *TranslationSet {
 		IgnoreFile:                           `Add to .gitignore`,
 		ExcludeFile:                          `Add to .git/info/exclude`,
 		RefreshFiles:                         `Refresh files`,
+		FocusMainView:                        "Focus main view",
 		Merge:                                `Merge`,
 		RegularMerge:                         "Regular merge",
 		MergeBranchTooltip:                   "View options for merging the selected item into the current branch (regular merge, squash merge)",

@@ -24,6 +24,8 @@ const (
 	STASH_CONTEXT_KEY                    types.ContextKey = "stash"
 	NORMAL_MAIN_CONTEXT_KEY              types.ContextKey = "normal"
 	NORMAL_SECONDARY_CONTEXT_KEY         types.ContextKey = "normalSecondary"
+	DIFF_MAIN_CONTEXT_KEY                types.ContextKey = "diff"
+	DIFF_SECONDARY_CONTEXT_KEY           types.ContextKey = "diffSecondary"
 	STAGING_MAIN_CONTEXT_KEY             types.ContextKey = "staging"
 	STAGING_SECONDARY_CONTEXT_KEY        types.ContextKey = "stagingSecondary"
 	PATCH_BUILDING_MAIN_CONTEXT_KEY      types.ContextKey = "patchBuilding"
@@ -100,6 +102,8 @@ type ContextTree struct {
 	Suggestions                 *SuggestionsContext
 	Normal                      types.Context
 	NormalSecondary             types.Context
+	Diff                        types.Context
+	DiffSecondary               types.Context
 	Staging                     *PatchExplorerContext
 	StagingSecondary            *PatchExplorerContext
 	CustomPatchBuilder          *PatchExplorerContext
@@ -149,6 +153,8 @@ func (self *ContextTree) Flatten() []types.Context {
 		self.Staging,
 		self.CustomPatchBuilderSecondary,
 		self.CustomPatchBuilder,
+		self.Diff,
+		self.DiffSecondary,
 		self.NormalSecondary,
 		self.Normal,
 

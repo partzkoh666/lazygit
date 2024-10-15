@@ -189,6 +189,8 @@ func (gui *Gui) resetHelpersAndControllers() {
 	patchExplorerControllerFactory := controllers.NewPatchExplorerControllerFactory(common)
 	stagingController := controllers.NewStagingController(common, gui.State.Contexts.Staging, gui.State.Contexts.StagingSecondary, false)
 	stagingSecondaryController := controllers.NewStagingController(common, gui.State.Contexts.StagingSecondary, gui.State.Contexts.Staging, true)
+	diffController := controllers.NewDiffController(common, gui.State.Contexts.Diff, gui.State.Contexts.DiffSecondary)
+	diffSecondaryController := controllers.NewDiffController(common, gui.State.Contexts.DiffSecondary, gui.State.Contexts.Diff)
 	patchBuildingController := controllers.NewPatchBuildingController(common)
 	snakeController := controllers.NewSnakeController(common)
 	reflogCommitsController := controllers.NewReflogCommitsController(common)
@@ -305,6 +307,14 @@ func (gui *Gui) resetHelpersAndControllers() {
 	controllers.AttachControllers(gui.State.Contexts.MergeConflicts,
 		mergeConflictsController,
 	)
+
+	controllers.AttachControllers(gui.State.Contexts.Diff,
+		diffController,
+		verticalScrollControllerFactory.Create(gui.State.Contexts.Diff))
+
+	controllers.AttachControllers(gui.State.Contexts.DiffSecondary,
+		diffSecondaryController,
+		verticalScrollControllerFactory.Create(gui.State.Contexts.DiffSecondary))
 
 	controllers.AttachControllers(gui.State.Contexts.Files,
 		filesController,

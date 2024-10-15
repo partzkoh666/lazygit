@@ -43,6 +43,8 @@ func (gui *Gui) orderedViewNameMappings() []viewNameMapping {
 		{viewPtr: &gui.Views.PatchBuilding, name: "patchBuilding"},
 		{viewPtr: &gui.Views.PatchBuildingSecondary, name: "patchBuildingSecondary"},
 		{viewPtr: &gui.Views.MergeConflicts, name: "mergeConflicts"},
+		{viewPtr: &gui.Views.Diff, name: "diff"},
+		{viewPtr: &gui.Views.DiffSecondary, name: "diffSecondary"},
 		{viewPtr: &gui.Views.Secondary, name: "secondary"},
 		{viewPtr: &gui.Views.Main, name: "main"},
 
@@ -76,6 +78,8 @@ func (gui *Gui) mainViews() []*gocui.View {
 	return []*gocui.View{
 		gui.Views.Main,
 		gui.Views.Secondary,
+		gui.Views.Diff,
+		gui.Views.DiffSecondary,
 		gui.Views.Staging,
 		gui.Views.StagingSecondary,
 		gui.Views.PatchBuilding,

@@ -15,6 +15,7 @@ func NewMainContextPair(main Context, secondary Context) MainContextPair {
 
 type MainViewPairs struct {
 	Normal         MainContextPair
+	Diff           MainContextPair
 	MergeConflicts MainContextPair
 	Staging        MainContextPair
 	PatchBuilding  MainContextPair

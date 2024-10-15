@@ -17,6 +17,8 @@ type Views struct {
 
 	Main                   *gocui.View
 	Secondary              *gocui.View
+	Diff                   *gocui.View
+	DiffSecondary          *gocui.View
 	Staging                *gocui.View
 	StagingSecondary       *gocui.View
 	PatchBuilding          *gocui.View

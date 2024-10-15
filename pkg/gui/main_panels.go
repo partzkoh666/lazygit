@@ -79,6 +79,13 @@ func (gui *Gui) normalMainContextPair() types.MainContextPair {
 	)
 }
 
+func (gui *Gui) diffMainContextPair() types.MainContextPair {
+	return types.NewMainContextPair(
+		gui.State.Contexts.Diff,
+		gui.State.Contexts.DiffSecondary,
+	)
+}
+
 func (gui *Gui) stagingMainContextPair() types.MainContextPair {
 	return types.NewMainContextPair(
 		gui.State.Contexts.Staging,

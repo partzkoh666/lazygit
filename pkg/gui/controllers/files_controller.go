@@ -113,6 +113,11 @@ func (self *FilesController) GetKeybindings(opts types.KeybindingsOpts) []*types
 			Description: self.c.Tr.RefreshFiles,
 		},
 		{
+			Key:         opts.GetKey(opts.Config.Universal.FocusMainView),
+			Handler:     self.focusMainView,
+			Description: self.c.Tr.FocusMainView,
+		},
+		{
 			Key:             opts.GetKey(opts.Config.Files.StashAllChanges),
 			Handler:         self.stash,
 			Description:     self.c.Tr.Stash,
@@ -613,6 +618,12 @@ func (self *FilesController) ignoreOrExcludeMenu(node *filetree.FileNode) error 
 
 func (self *FilesController) refresh() error {
 	return self.c.Refresh(types.RefreshOptions{Scope: []types.RefreshableView{types.FILES}})
+}
+
+func (self *FilesController) focusMainView() error {
+	self.c.Context().Push(self.c.Contexts().Diff, types.OnFocusOpts{})
+
+	return nil
 }
 
 func (self *FilesController) handleAmendCommitPress() error {

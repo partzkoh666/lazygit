@@ -122,6 +122,7 @@ func (self *guiCommon) RenderToMainViews(opts types.RefreshMainOpts) {
 func (self *guiCommon) MainViewPairs() types.MainViewPairs {
 	return types.MainViewPairs{
 		Normal:         self.gui.normalMainContextPair(),
+		Diff:           self.gui.diffMainContextPair(),
 		Staging:        self.gui.stagingMainContextPair(),
 		PatchBuilding:  self.gui.patchBuildingMainContextPair(),
 		MergeConflicts: self.gui.mergingMainContextPair(),
