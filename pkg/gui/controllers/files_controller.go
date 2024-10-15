@@ -229,19 +229,7 @@ func (self *FilesController) GetOnRenderToMain() func() {
 		self.c.Helpers().Diff.WithDiffModeCheck(func() {
 			node := self.context().GetSelected()
 
-			if node == nil {
-				self.c.RenderToMainViews(types.RefreshMainOpts{
-					Pair: self.c.MainViewPairs().Normal,
-					Main: &types.ViewUpdateOpts{
-						Title:    self.c.Tr.DiffTitle,
-						SubTitle: self.c.Helpers().Diff.IgnoringWhitespaceSubTitle(),
-						Task:     types.NewRenderStringTask(self.c.Tr.NoChangedFiles),
-					},
-				})
-				return
-			}
-
-			if node.File != nil && node.File.HasInlineMergeConflicts {
+			if node != nil && node.File != nil && node.File.HasInlineMergeConflicts {
 				hasConflicts, err := self.c.Helpers().MergeConflicts.SetMergeState(node.GetPath())
 				if err != nil {
 					return
@@ -256,43 +244,11 @@ func (self *FilesController) GetOnRenderToMain() func() {
 			self.c.Helpers().MergeConflicts.ResetMergeState()
 
 			pair := self.c.MainViewPairs().Normal
-			if node.File != nil {
+			if node != nil && node.File != nil {
 				pair = self.c.MainViewPairs().Staging
 			}
 
-			split := self.c.UserConfig().Gui.SplitDiff == "always" || (node.GetHasUnstagedChanges() && node.GetHasStagedChanges())
-			mainShowsStaged := !split && node.GetHasStagedChanges()
-
-			cmdObj := self.c.Git().WorkingTree.WorktreeFileDiffCmdObj(node, false, mainShowsStaged)
-			title := self.c.Tr.UnstagedChanges
-			if mainShowsStaged {
-				title = self.c.Tr.StagedChanges
-			}
-			refreshOpts := types.RefreshMainOpts{
-				Pair: pair,
-				Main: &types.ViewUpdateOpts{
-					Task:     types.NewRunPtyTask(cmdObj.GetCmd()),
-					SubTitle: self.c.Helpers().Diff.IgnoringWhitespaceSubTitle(),
-					Title:    title,
-				},
-			}
-
-			if split {
-				cmdObj := self.c.Git().WorkingTree.WorktreeFileDiffCmdObj(node, false, true)
-
-				title := self.c.Tr.StagedChanges
-				if mainShowsStaged {
-					title = self.c.Tr.UnstagedChanges
-				}
-
-				refreshOpts.Secondary = &types.ViewUpdateOpts{
-					Title:    title,
-					SubTitle: self.c.Helpers().Diff.IgnoringWhitespaceSubTitle(),
-					Task:     types.NewRunPtyTask(cmdObj.GetCmd()),
-				}
-			}
-
-			self.c.RenderToMainViews(refreshOpts)
+			self.c.Helpers().Diff.RenderFilesViewDiff(pair)
 		})
 	}
 }

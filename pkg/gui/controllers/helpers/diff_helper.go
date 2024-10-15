@@ -171,3 +171,56 @@ func (self *DiffHelper) OpenDiffToolForRef(selectedRef types.Ref) error {
 		}))
 	return err
 }
+
+func (self *DiffHelper) RenderFilesViewDiff(pair types.MainContextPair) {
+	self.WithDiffModeCheck(func() {
+		node := self.c.Contexts().Files.GetSelected()
+
+		if node == nil {
+			self.c.RenderToMainViews(types.RefreshMainOpts{
+				Pair: self.c.MainViewPairs().Normal,
+				Main: &types.ViewUpdateOpts{
+					Title:    self.c.Tr.DiffTitle,
+					SubTitle: self.IgnoringWhitespaceSubTitle(),
+					Task:     types.NewRenderStringTask(self.c.Tr.NoChangedFiles),
+				},
+			})
+			return
+		}
+
+		split := self.c.UserConfig().Gui.SplitDiff == "always" || (node.GetHasUnstagedChanges() && node.GetHasStagedChanges())
+		mainShowsStaged := !split && node.GetHasStagedChanges()
+
+		cmdObj := self.c.Git().WorkingTree.WorktreeFileDiffCmdObj(node, false, mainShowsStaged)
+		title := self.c.Tr.UnstagedChanges
+		if mainShowsStaged {
+			title = self.c.Tr.StagedChanges
+		}
+
+		refreshOpts := types.RefreshMainOpts{
+			Pair: pair,
+			Main: &types.ViewUpdateOpts{
+				Task:     types.NewRunPtyTask(cmdObj.GetCmd()),
+				SubTitle: self.IgnoringWhitespaceSubTitle(),
+				Title:    title,
+			},
+		}
+
+		if split {
+			cmdObj := self.c.Git().WorkingTree.WorktreeFileDiffCmdObj(node, false, true)
+
+			title := self.c.Tr.StagedChanges
+			if mainShowsStaged {
+				title = self.c.Tr.UnstagedChanges
+			}
+
+			refreshOpts.Secondary = &types.ViewUpdateOpts{
+				Title:    title,
+				SubTitle: self.IgnoringWhitespaceSubTitle(),
+				Task:     types.NewRunPtyTask(cmdObj.GetCmd()),
+			}
+		}
+
+		self.c.RenderToMainViews(refreshOpts)
+	})
+}
