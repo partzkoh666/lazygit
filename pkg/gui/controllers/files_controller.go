@@ -621,7 +621,11 @@ func (self *FilesController) refresh() error {
 }
 
 func (self *FilesController) focusMainView() error {
-	self.c.Context().Push(self.c.Contexts().Diff, types.OnFocusOpts{})
+	mainView := self.c.Helpers().Window.TopViewInWindow("main", false)
+	lineIdx := mainView.OriginY() + mainView.Height()/2
+	lineIdx = lo.Clamp(lineIdx, 0, mainView.LinesHeight()-1)
+	self.c.Context().Push(self.c.Contexts().Diff,
+		types.OnFocusOpts{ClickedWindowName: "main", ClickedViewLineIdx: lineIdx})
 
 	return nil
 }

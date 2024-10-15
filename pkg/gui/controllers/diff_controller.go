@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/jesseduffield/gocui"
 	"github.com/jesseduffield/lazygit/pkg/gui/types"
+	"github.com/jesseduffield/lazygit/pkg/tasks"
 )
 
 type DiffController struct {
@@ -11,6 +12,8 @@ type DiffController struct {
 
 	context      types.Context
 	otherContext types.Context
+
+	viewBufferManagerMap *map[string]*tasks.ViewBufferManager
 }
 
 var _ types.IController = &DiffController{}
@@ -19,12 +22,14 @@ func NewDiffController(
 	c *ControllerCommon,
 	context types.Context,
 	otherContext types.Context,
+	viewBufferManagerMap *map[string]*tasks.ViewBufferManager,
 ) *DiffController {
 	return &DiffController{
-		baseController: baseController{},
-		c:              c,
-		context:        context,
-		otherContext:   otherContext,
+		baseController:       baseController{},
+		c:                    c,
+		context:              context,
+		otherContext:         otherContext,
+		viewBufferManagerMap: viewBufferManagerMap,
 	}
 }
 
@@ -56,6 +61,15 @@ func (self *DiffController) GetMouseKeybindings(opts types.KeybindingsOpts) []*g
 func (self *DiffController) GetOnFocus() func(types.OnFocusOpts) {
 	return func(opts types.OnFocusOpts) {
 		self.c.Helpers().Diff.RenderFilesViewDiff(self.c.MainViewPairs().Diff)
+		if opts.ClickedWindowName == "main" {
+			if manager, ok := (*self.viewBufferManagerMap)[self.context.GetViewName()]; ok {
+				// TODO: doesn't work the first time after launching. Need to
+				// find a way to construct the ViewBufferManager for this view
+				// earlier.
+				manager.ReadLines(opts.ClickedViewLineIdx - self.context.GetView().LinesHeight() + 1)
+			}
+			self.context.GetView().FocusPoint(0, opts.ClickedViewLineIdx)
+		}
 	}
 }
 
