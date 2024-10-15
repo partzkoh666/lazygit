@@ -197,6 +197,12 @@ func (self *DiffHelper) RenderFilesViewDiff(pair types.MainContextPair) {
 			title = self.c.Tr.StagedChanges
 		}
 
+		// >>>>> HACK
+		if pair == self.c.MainViewPairs().Diff {
+			title += " (focused)"
+		}
+		// <<<<< HACK
+
 		refreshOpts := types.RefreshMainOpts{
 			Pair: pair,
 			Main: &types.ViewUpdateOpts{
@@ -213,6 +219,12 @@ func (self *DiffHelper) RenderFilesViewDiff(pair types.MainContextPair) {
 			if mainShowsStaged {
 				title = self.c.Tr.UnstagedChanges
 			}
+
+			// >>>>> HACK
+			if pair == self.c.MainViewPairs().Diff {
+				title += " (focused)"
+			}
+			// <<<<< HACK
 
 			refreshOpts.Secondary = &types.ViewUpdateOpts{
 				Title:    title,
