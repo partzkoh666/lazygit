@@ -57,26 +57,8 @@ func NewContextTree(c *ContextCommon) *ContextTree {
 				Focusable:  false,
 			}),
 		),
-		Diff: NewSimpleContext(
-			NewBaseContext(NewBaseContextOpts{
-				Kind:             types.MAIN_CONTEXT,
-				View:             c.Views().Diff,
-				WindowName:       "main",
-				Key:              DIFF_MAIN_CONTEXT_KEY,
-				Focusable:        true,
-				HighlightOnFocus: true,
-			}),
-		),
-		DiffSecondary: NewSimpleContext(
-			NewBaseContext(NewBaseContextOpts{
-				Kind:             types.MAIN_CONTEXT,
-				View:             c.Views().DiffSecondary,
-				WindowName:       "secondary",
-				Key:              DIFF_SECONDARY_CONTEXT_KEY,
-				Focusable:        true,
-				HighlightOnFocus: true,
-			}),
-		),
+		Diff:          NewDiffContext(c.Views().Diff, "main", DIFF_MAIN_CONTEXT_KEY, c),
+		DiffSecondary: NewDiffContext(c.Views().DiffSecondary, "secondary", DIFF_SECONDARY_CONTEXT_KEY, c),
 		Staging: NewPatchExplorerContext(
 			c.Views().Staging,
 			"main",
