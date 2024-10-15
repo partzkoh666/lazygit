@@ -529,9 +529,9 @@ func (v *View) setRune(x, y int, ch rune, fgColor, bgColor Attribute) {
 			}
 			fgColor = fgColor | AttrBold
 			if v.HighlightInactive {
-				bgColor = bgColor | v.InactiveViewSelBgColor
+				bgColor = (bgColor & AttrStyleBits) | v.InactiveViewSelBgColor
 			} else {
-				bgColor = bgColor | v.SelBgColor
+				bgColor = (bgColor & AttrStyleBits) | v.SelBgColor
 			}
 		}
 	}
